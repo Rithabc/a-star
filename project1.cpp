@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
-#include <cstdlib> 
+#include <cstdlib>
 #include <ctime>
 #include <chrono>
 #include <random>
@@ -10,7 +10,7 @@
 #include <queue>
 #include <stack>
 #include <set>
-#define INT_MAX = 10^9;
+#define INT_MAX = 10 ^ 9;
 #define FLT_MAX 3.402823466e+38F
 #include <cstring>
 
@@ -18,117 +18,142 @@ using namespace std;
 
 std::mt19937 gen(std::chrono::system_clock::now().time_since_epoch().count());
 
-int generateRandom(int low, int high) {
+int generateRandom(int low, int high)
+{
 
     std::uniform_int_distribution<> dist(low, high);
     return dist(gen);
 }
 
-void dfs(int row, int col, int n, vector<vector<int>> &grid){
+void dfs(int row, int col, int n, vector<vector<int>> &grid)
+{
     int z = 0;
-    if(row<0||row>=n||col<0||col>=n) return;
-    if(grid[row][col] == 0) return;
-    if(row-1>=0 && row-1<n){
-        if(grid[row-1][col] == 0){
+    if (row < 0 || row >= n || col < 0 || col >= n)
+        return;
+    if (grid[row][col] == 0)
+        return;
+    if (row - 1 >= 0 && row - 1 < n)
+    {
+        if (grid[row - 1][col] == 0)
+        {
             z++;
-            if(z>1) return;
+            if (z > 1)
+                return;
         }
-        
     }
-    if(row+1>=0 && row+1<n){
-        if(grid[row+1][col] == 0){
+    if (row + 1 >= 0 && row + 1 < n)
+    {
+        if (grid[row + 1][col] == 0)
+        {
             z++;
-            if(z>1) return;
+            if (z > 1)
+                return;
         }
-        
     }
-    if(col+1>=0 && col+1<n){
-        if(grid[row][col+1] == 0){
+    if (col + 1 >= 0 && col + 1 < n)
+    {
+        if (grid[row][col + 1] == 0)
+        {
             z++;
-            if(z>1) return;
+            if (z > 1)
+                return;
         }
-        
     }
-    if(col-1>=0 && col-1<n){
-        if(grid[row][col-1] == 0){
+    if (col - 1 >= 0 && col - 1 < n)
+    {
+        if (grid[row][col - 1] == 0)
+        {
             z++;
-            if(z>1) return;
+            if (z > 1)
+                return;
         }
-        
     }
 
-    if(z>1) return;
+    if (z > 1)
+        return;
     grid[row][col] = 0;
 
-    int cell = generateRandom(0,3);
-    switch(cell){
-        case 0:{
-            dfs(row+1,col,n,grid);
-            dfs(row-1,col,n,grid);
-            dfs(row,col-1,n,grid);
-            dfs(row,col+1,n,grid);
-            break;
-        }         
-        case 1:{
-            dfs(row-1,col,n,grid);
-            dfs(row+1,col,n,grid);
-            dfs(row,col+1,n,grid);
-            dfs(row,col-1,n,grid);
-            break;
-        }  
-        case 2:{
-            dfs(row,col-1,n,grid);
-            dfs(row,col+1,n,grid);
-            dfs(row+1,col,n,grid);
-            dfs(row-1,col,n,grid);
-            break;
-        }  
-        case 3:{
-            dfs(row,col+1,n,grid);
-            dfs(row,col-1,n,grid);
-            dfs(row+1,col,n,grid);
-            dfs(row-1,col,n,grid);
-            break;
-        }  
+    int cell = generateRandom(0, 3);
+    switch (cell)
+    {
+    case 0:
+    {
+        dfs(row + 1, col, n, grid);
+        dfs(row - 1, col, n, grid);
+        dfs(row, col - 1, n, grid);
+        dfs(row, col + 1, n, grid);
+        break;
+    }
+    case 1:
+    {
+        dfs(row - 1, col, n, grid);
+        dfs(row + 1, col, n, grid);
+        dfs(row, col + 1, n, grid);
+        dfs(row, col - 1, n, grid);
+        break;
+    }
+    case 2:
+    {
+        dfs(row, col - 1, n, grid);
+        dfs(row, col + 1, n, grid);
+        dfs(row + 1, col, n, grid);
+        dfs(row - 1, col, n, grid);
+        break;
+    }
+    case 3:
+    {
+        dfs(row, col + 1, n, grid);
+        dfs(row, col - 1, n, grid);
+        dfs(row + 1, col, n, grid);
+        dfs(row - 1, col, n, grid);
+        break;
+    }
     }
 }
 
-vector<vector<int>> generateGrid(int n){
-    vector<vector<int>> grid(n,vector<int>(n,1));
-    int ind = generateRandom(0,n-1);
-    cout<<ind<<endl;
+vector<vector<int>> generateGrid(int n)
+{
+    vector<vector<int>> grid(n, vector<int>(n, 1));
+    int ind = generateRandom(0, n - 1);
+    cout << ind << endl;
     // grid[ind][ind] = 0;
-    dfs(ind,ind,n,grid);
-    
-    for(int row = 0; row<n ; row++){
-        for(int col = 0; col<n; col++){
-            cout<<grid[row][col]<<" ";
+    dfs(ind, ind, n, grid);
+
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            cout << grid[row][col] << " ";
         }
-        cout<<endl;
+        cout << endl;
     }
-        
+
     return grid;
 }
 // A*star professor's stratergy
 
-int manhattan(int r1, int c1, int r2, int c2) {
+int manhattan(int r1, int c1, int r2, int c2)
+{
     return abs(r1 - r2) + abs(c1 - c2);
 }
-
 
 // A C++ Program to implement A* Search Algorithm
 
 #define ROW 6
 #define COL 6
 
+// int ROW = 6;
+// int COL = 6;
+
 // Creating a shortcut for int, int pair type
 typedef pair<int, int> Pair;
 
 // Creating a shortcut for pair<int, pair<int, int>> type
-typedef pair<double, pair<int, int> > pPair;
+typedef pair<double, pair<int, int>> pPair;
 
 // A structure to hold the necessary parameters
-struct cell {
+struct cell
+{
     // Row and Column index of its parent
     // Note that 0 <= i <= ROW-1 & 0 <= j <= COL-1
     int parent_i, parent_j;
@@ -142,8 +167,7 @@ bool isValid(int row, int col)
 {
     // Returns true if row number and column number
     // is in range
-    return (row >= 0) && (row < ROW) && (col >= 0)
-           && (col < COL);
+    return (row >= 0) && (row < ROW) && (col >= 0) && (col < COL);
 }
 
 // A Utility Function to check whether the given cell is
@@ -172,22 +196,24 @@ double calculateHValue(int row, int col, Pair dest)
 {
     // Return using the distance formula
     return ((double)sqrt(
-        (row - dest.first) * (row - dest.first)
-        + (col - dest.second) * (col - dest.second)));
+        (row - dest.first) * (row - dest.first) + (col - dest.second) * (col - dest.second)));
 }
 
 // A Utility Function to trace the path from the source
 // to destination
+
+vector<Pair> edit;
+vector<string> directions;
 void tracePath(cell cellDetails[][COL], Pair dest)
 {
-    printf("\nThe Path is ");
+    // printf("\nThe Path is ");
     int row = dest.first;
     int col = dest.second;
 
     stack<Pair> Path;
 
-    while (!(cellDetails[row][col].parent_i == row
-             && cellDetails[row][col].parent_j == col)) {
+    while (!(cellDetails[row][col].parent_i == row && cellDetails[row][col].parent_j == col))
+    {
         Path.push(make_pair(row, col));
         int temp_row = cellDetails[row][col].parent_i;
         int temp_col = cellDetails[row][col].parent_j;
@@ -195,11 +221,45 @@ void tracePath(cell cellDetails[][COL], Pair dest)
         col = temp_col;
     }
 
+    int tr = row;
+    int tc = col;
+
     Path.push(make_pair(row, col));
-    while (!Path.empty()) {
+    while (!Path.empty())
+    {
         pair<int, int> p = Path.top();
         Path.pop();
-        printf("-> (%d,%d) ", p.first, p.second);
+        // cout << p.first << "," << p.second << " ";
+        // cout << " " << tr << " " << tc << endl;
+        if (p.first == tr - 1 && p.second == tc)
+        {
+            // printf("-> UP ");
+            edit.push_back(make_pair(-1, 0));
+            directions.push_back("UP");
+        }
+        else if (p.first == tr + 1 && p.second == tc)
+        {
+            // printf("-> DOWN ");
+            edit.push_back(make_pair(1, 0));
+            directions.push_back("DOWN");
+        }
+        else if (p.first == tr && p.second == tc - 1)
+        {
+            // printf("-> LEFT ");
+            edit.push_back(make_pair(0, -1));
+            directions.push_back("LEFT");
+        }
+        else if (p.first == tr && p.second == tc + 1)
+        {
+            // printf("-> RIGHT ");
+            edit.push_back(make_pair(0, 1));
+            directions.push_back("RIGHT");
+        }
+        tr = p.first;
+        tc = p.second;
+        // cout<<endl;
+
+        // printf("-> (%d,%d) ", p.first, p.second);
     }
 
     return;
@@ -211,29 +271,30 @@ void tracePath(cell cellDetails[][COL], Pair dest)
 void aStarSearch(int grid[][COL], Pair src, Pair dest)
 {
     // If the source is out of range
-    if (isValid(src.first, src.second) == false) {
+    if (isValid(src.first, src.second) == false)
+    {
         printf("Source is invalid\n");
         return;
     }
 
     // If the destination is out of range
-    if (isValid(dest.first, dest.second) == false) {
+    if (isValid(dest.first, dest.second) == false)
+    {
         printf("Destination is invalid\n");
         return;
     }
 
     // Either the source or the destination is blocked
-    if (isUnBlocked(grid, src.first, src.second) == false
-        || isUnBlocked(grid, dest.first, dest.second)
-               == false) {
+    if (isUnBlocked(grid, src.first, src.second) == false || isUnBlocked(grid, dest.first, dest.second) == false)
+    {
         printf("Source or the destination is blocked\n");
         return;
     }
 
     // If the destination cell is the same as source cell
-    if (isDestination(src.first, src.second, dest)
-        == true) {
-        printf("We are already at the destination\n");
+    if (isDestination(src.first, src.second, dest) == true)
+    {
+        // printf("We are already at the destination\n");
         return;
     }
 
@@ -249,8 +310,10 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
 
     int i, j;
 
-    for (i = 0; i < ROW; i++) {
-        for (j = 0; j < COL; j++) {
+    for (i = 0; i < ROW; i++)
+    {
+        for (j = 0; j < COL; j++)
+        {
             cellDetails[i][j].f = FLT_MAX;
             cellDetails[i][j].g = FLT_MAX;
             cellDetails[i][j].h = FLT_MAX;
@@ -285,7 +348,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
     // the destination is not reached.
     bool foundDest = false;
 
-    while (!openList.empty()) {
+    while (!openList.empty())
+    {
         pPair p = *openList.begin();
 
         // Remove this vertex from the open list
@@ -323,14 +387,16 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         //----------- 1st Successor (North) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i - 1, j) == true) {
+        if (isValid(i - 1, j) == true)
+        {
             // If the destination cell is the same as the
             // current successor
-            if (isDestination(i - 1, j, dest) == true) {
+            if (isDestination(i - 1, j, dest) == true)
+            {
                 // Set the Parent of the destination cell
                 cellDetails[i - 1][j].parent_i = i;
                 cellDetails[i - 1][j].parent_j = j;
-                printf("The destination cell is found\n");
+                // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -338,9 +404,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
             // If the successor is already on the closed
             // list or if it is blocked, then ignore it.
             // Else do the following
-            else if (closedList[i - 1][j] == false
-                     && isUnBlocked(grid, i - 1, j)
-                            == true) {
+            else if (closedList[i - 1][j] == false && isUnBlocked(grid, i - 1, j) == true)
+            {
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = calculateHValue(i - 1, j, dest);
                 fNew = gNew + hNew;
@@ -353,8 +418,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // If it is on the open list already, check
                 // to see if this path to that square is
                 // better, using 'f' cost as the measure.
-                if (cellDetails[i - 1][j].f == FLT_MAX
-                    || cellDetails[i - 1][j].f > fNew) {
+                if (cellDetails[i - 1][j].f == FLT_MAX || cellDetails[i - 1][j].f > fNew)
+                {
                     openList.insert(make_pair(
                         fNew, make_pair(i - 1, j)));
 
@@ -371,14 +436,16 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         //----------- 2nd Successor (South) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i + 1, j) == true) {
+        if (isValid(i + 1, j) == true)
+        {
             // If the destination cell is the same as the
             // current successor
-            if (isDestination(i + 1, j, dest) == true) {
+            if (isDestination(i + 1, j, dest) == true)
+            {
                 // Set the Parent of the destination cell
                 cellDetails[i + 1][j].parent_i = i;
                 cellDetails[i + 1][j].parent_j = j;
-                printf("The destination cell is found\n");
+                // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -386,9 +453,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
             // If the successor is already on the closed
             // list or if it is blocked, then ignore it.
             // Else do the following
-            else if (closedList[i + 1][j] == false
-                     && isUnBlocked(grid, i + 1, j)
-                            == true) {
+            else if (closedList[i + 1][j] == false && isUnBlocked(grid, i + 1, j) == true)
+            {
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = calculateHValue(i + 1, j, dest);
                 fNew = gNew + hNew;
@@ -401,8 +467,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // If it is on the open list already, check
                 // to see if this path to that square is
                 // better, using 'f' cost as the measure.
-                if (cellDetails[i + 1][j].f == FLT_MAX
-                    || cellDetails[i + 1][j].f > fNew) {
+                if (cellDetails[i + 1][j].f == FLT_MAX || cellDetails[i + 1][j].f > fNew)
+                {
                     openList.insert(make_pair(
                         fNew, make_pair(i + 1, j)));
                     // Update the details of this cell
@@ -418,14 +484,16 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         //----------- 3rd Successor (East) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i, j + 1) == true) {
+        if (isValid(i, j + 1) == true)
+        {
             // If the destination cell is the same as the
             // current successor
-            if (isDestination(i, j + 1, dest) == true) {
+            if (isDestination(i, j + 1, dest) == true)
+            {
                 // Set the Parent of the destination cell
                 cellDetails[i][j + 1].parent_i = i;
                 cellDetails[i][j + 1].parent_j = j;
-                printf("The destination cell is found\n");
+                // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -434,9 +502,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
             // If the successor is already on the closed
             // list or if it is blocked, then ignore it.
             // Else do the following
-            else if (closedList[i][j + 1] == false
-                     && isUnBlocked(grid, i, j + 1)
-                            == true) {
+            else if (closedList[i][j + 1] == false && isUnBlocked(grid, i, j + 1) == true)
+            {
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = calculateHValue(i, j + 1, dest);
                 fNew = gNew + hNew;
@@ -449,8 +516,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // If it is on the open list already, check
                 // to see if this path to that square is
                 // better, using 'f' cost as the measure.
-                if (cellDetails[i][j + 1].f == FLT_MAX
-                    || cellDetails[i][j + 1].f > fNew) {
+                if (cellDetails[i][j + 1].f == FLT_MAX || cellDetails[i][j + 1].f > fNew)
+                {
                     openList.insert(make_pair(
                         fNew, make_pair(i, j + 1)));
 
@@ -467,14 +534,16 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         //----------- 4th Successor (West) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i, j - 1) == true) {
+        if (isValid(i, j - 1) == true)
+        {
             // If the destination cell is the same as the
             // current successor
-            if (isDestination(i, j - 1, dest) == true) {
+            if (isDestination(i, j - 1, dest) == true)
+            {
                 // Set the Parent of the destination cell
                 cellDetails[i][j - 1].parent_i = i;
                 cellDetails[i][j - 1].parent_j = j;
-                printf("The destination cell is found\n");
+                // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -483,9 +552,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
             // If the successor is already on the closed
             // list or if it is blocked, then ignore it.
             // Else do the following
-            else if (closedList[i][j - 1] == false
-                     && isUnBlocked(grid, i, j - 1)
-                            == true) {
+            else if (closedList[i][j - 1] == false && isUnBlocked(grid, i, j - 1) == true)
+            {
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = calculateHValue(i, j - 1, dest);
                 fNew = gNew + hNew;
@@ -498,8 +566,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // If it is on the open list already, check
                 // to see if this path to that square is
                 // better, using 'f' cost as the measure.
-                if (cellDetails[i][j - 1].f == FLT_MAX
-                    || cellDetails[i][j - 1].f > fNew) {
+                if (cellDetails[i][j - 1].f == FLT_MAX || cellDetails[i][j - 1].f > fNew)
+                {
                     openList.insert(make_pair(
                         fNew, make_pair(i, j - 1)));
 
@@ -512,10 +580,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
                 }
             }
         }
-
     }
 
-        
     // When the destination cell is not found and the open
     // list is empty, then we conclude that we failed to
     // reach the destination cell. This may happen when the
@@ -527,38 +593,180 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
     return;
 }
 
+int algoUtil(int grid[][COL], Pair src, Pair dest, vector<pair<int, int>> bots, vector<Pair> temp)
+{
+    directions.clear();
+    while (!temp.empty())
+    {
+        // cout<<temp[0].first<<" "<<temp[0].second<<endl;
+        int random = generateRandom(0, temp.size() - 1);
+        aStarSearch(grid, temp[random], dest);
+        for (int i = 0; i < bots.size(); i++)
+        {
+            for (int j = 0; j < edit.size(); j++)
+            {
+                if (bots[i].first == dest.first && bots[i].second == dest.second)
+                {
+                }
+                else
+                {
+                    if (bots[i].first + edit[j].first < 0 || bots[i].first + edit[j].first >= ROW || bots[i].second + edit[j].second < 0 || bots[i].second + edit[j].second >= COL)
+                        continue;
+
+                    bots[i].first += edit[j].first;
+                    bots[i].second += edit[j].second;
+                    if (grid[bots[i].first][bots[i].second] == 1)
+                    {
+                        bots[i].first -= edit[j].first;
+                        bots[i].second -= edit[j].second;
+                    }
+                }
+            }
+        }
+        // cout<<endl;
+        temp.clear();
+        for (int i = 0; i < bots.size(); i++)
+        {
+            if (bots[i].first == dest.first && bots[i].second == dest.second)
+            {
+            }
+            else
+            {
+                // cout<<"("<<bots[i].first<<","<<bots[i].second<<") ";
+                temp.push_back(bots[i]);
+            }
+        }
+        edit.clear();
+
+        // for(int i = 0; i<temp.size(); i++){
+        //     cout<<"("<<temp[i].first<<","<<temp[i].second<<") ";
+        // }
+    }
+    // for(int i=0;i<directions.size();i++){
+    //     cout<<directions[i]<<" ";
+    // }
+    // cout<<endl;
+    // cout<<directions.size()<<endl;
+    cout << src.first << "," << src.second << " to " << dest.first << "," << dest.second << " : ";
+    cout << directions.size() << endl;
+    return directions.size();
+}
+
 // Driver program to test above function
 int main()
 {
     /* Description of the Grid-
      1--> The cell is not blocked
      0--> The cell is blocked    */
-    int grid[ROW][COL]
-        = { {1,1,1,1,0,1},
-            {1,0,0,1,0,0},
-            {0,0,1,1,0,1},
-            {0,1,0,0,0,1},
-            {0,0,0,1,0,1},
-            {0,0,0,0,0,0}};
 
-    vector<pair<int,int>> bots;
-    for(int i = 0; i<6; i++ ){
-        for(int j= 0;j<6;j++){
-            if(grid[i][j] == 0){
-                Pair p = make_pair(i, j); 
+    int grid[ROW][COL] = {{1, 1, 1, 1, 0, 1},
+                          {1, 0, 0, 1, 0, 0},
+                          {0, 0, 1, 1, 0, 1},
+                          {0, 1, 0, 0, 0, 1},
+                          {0, 0, 0, 1, 0, 1},
+                          {0, 0, 0, 0, 0, 0}};
+
+    // vector<vector<int>> generate_grid = generateGrid(6);
+    // for(int i = 0; i<6; i++ ){
+    //     for(int j= 0;j<6;j++){
+    //         grid[i][j] = generate_grid[i][j];
+    //     }
+    // }
+
+    vector<pair<int, int>> bots;
+    bool flag = false;
+
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 6; j++)
+        {
+            if (grid[i][j] == 0)
+            {
+
+                Pair p = make_pair(i, j);
                 bots.push_back(p);
             }
         }
     }
 
-
     // Source is the left-most bottom-most corner
-    Pair src = make_pair(1, 1);
 
-    // Destination is the left-most top-most corner
+    stack<Pair> path;
+    vector<Pair> temp = bots;
+
+    Pair src = bots[generateRandom(0, bots.size() - 1)];
     Pair dest = make_pair(5, 0);
 
-    aStarSearch(grid, bots[0], dest);
+    cout << src.first << "," << src.second << endl;
+    cout << dest.first << "," << dest.second << endl;
 
+    //     while(!temp.empty()){
+    //         // cout<<temp[0].first<<" "<<temp[0].second<<endl;
+    //         int random  = generateRandom(0,temp.size()-1);
+    //     aStarSearch(grid, temp[random], dest);
+    //     for(int i = 0; i<bots.size(); i++){
+    //         for(int j = 0; j<edit.size(); j++){
+    //             if(bots[i].first == dest.first && bots[i].second == dest.second){
+
+    //             }else{
+    //                 if(bots[i].first + edit[j].first < 0 || bots[i].first + edit[j].first >= ROW || bots[i].second + edit[j].second < 0 || bots[i].second + edit[j].second >= COL) continue;
+
+    //                 bots[i].first += edit[j].first;
+    //                 bots[i].second += edit[j].second;
+    //                 if(grid[bots[i].first][bots[i].second]==1){
+    //                     bots[i].first -= edit[j].first;
+    //                     bots[i].second -= edit[j].second;
+    //                 }
+
+    //             }
+    //         }
+    //     }
+    //     // cout<<endl;
+    //     temp.clear();
+    //     for(int i = 0; i<bots.size(); i++){
+    //         if(bots[i].first == dest.first && bots[i].second == dest.second){}
+    //         else{
+    //             // cout<<"("<<bots[i].first<<","<<bots[i].second<<") ";
+    //             temp.push_back(bots[i]);
+    //         }
+    //     }
+    //     edit.clear();
+
+    //     // for(int i = 0; i<temp.size(); i++){
+    //     //     cout<<"("<<temp[i].first<<","<<temp[i].second<<") ";
+    //     // }
+
+    // }
+    //     for(int i=0;i<directions.size();i++){
+    //         cout<<directions[i]<<" ";
+    //     }
+    //     cout<<endl;
+    //     cout<<directions.size()<<endl;
+    int max = 9999999;
+    vector<string> ans;
+    Pair ansSrc, ansDest;
+    for (int i = 0; i < bots.size(); i++)
+    {
+        for (int j = 0; j < bots.size(); j++)
+        {
+            int k = algoUtil(grid, bots[i], bots[j], bots, temp);
+            if (k < max)
+            {
+                max = k;
+                ans = directions;
+                ansSrc = bots[i];
+                ansDest = bots[j];
+            }
+        }
+    }
+    for (int i = 0; i < ans.size(); i++)
+    {
+        cout << ans[i] << " ";
+    }
+    cout << endl;
+    cout << ansSrc.first << "," << ansSrc.second << " to " << ansDest.first << "," << ansDest.second << " : ";
+    cout << max << endl;
+
+    cout << manhattan(ansSrc.first, ansSrc.second, ansDest.first, ansDest.second) << endl;
     return (0);
 }
