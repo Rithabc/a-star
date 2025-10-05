@@ -150,8 +150,8 @@ int manhattan(int r1, int c1, int r2, int c2)
 
 // A C++ Program to implement A* Search Algorithm
 
-#define ROW 500
-#define COL 500
+#define ROW 400
+#define COL 400
 
 // int ROW = 2;
 // int COL = 2;
@@ -833,16 +833,56 @@ int main()
     
     vector<string> ansDfs;
     vector<vector<int>> visDfs(ROW,vector<int>(ROW,0));
-    mapDfs(bots[0].first,bots[0].second,-10,-10,grid,ansDfs,visDfs,bots,mpp);
-    for(string s:ansDfs){
-        cout << s << " ";
+    // mapDfs(bots[0].first,bots[0].second,-10,-10,grid,ansDfs,visDfs,bots,mpp);
+    
+
+    stack<Pair> st;
+    st.push(bots[0]);
+    int prevI = bots[0].first;
+    int prevJ = bots[0].second;
+    while(!mpp.size() == 0){
+        Pair t = st.top();
+        // cout << t.first<< "," <<t.second<<"->";
+        mpp.erase(t);
+        int i = t.first;
+        int j = t.second;
+        visDfs[i][j] = 1;
+
+        if(prevI == i-1) ansDfs.push_back("DOWN");
+        if(prevI == i+1) ansDfs.push_back("UP");
+        if(prevJ == j-1) ansDfs.push_back("RIGHT");
+        if(prevJ == j+1) ansDfs.push_back("LEFT");
+
+        prevI = i;
+        prevJ =j;
+
+        if(i-1>=0 && visDfs[i-1][j] == 0 && grid[i-1][j]==0){
+            st.push(make_pair(i-1,j));
+        }
+        else if(i+1<ROW && visDfs[i+1][j] == 0  && grid[i+1][j]==0){
+            st.push(make_pair(i+1,j));
+        }
+        else if(j-1>=0 && visDfs[i][j-1] == 0  && grid[i][j-1]==0){
+            st.push(make_pair(i,j-1));
+        }
+        else if(j+1<COL && visDfs[i][j+1] == 0 && grid[i][j+1]==0){
+            st.push(make_pair(i,j+1));
+        }else{
+            // cout << i << ","<<j;
+            // cout << "pop";
+            st.pop();
+        }
+
+        
+
     }
+
+    // for(string s:ansDfs){
+    //     cout << s << " ";
+    // }
     cout <<endl;
     cout << bots[1].first << "," << bots[1].second <<endl;
-    cout << ansDfs.size();
-
-
-                        
+    cout << ansDfs.size();       
 
     
     
