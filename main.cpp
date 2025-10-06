@@ -729,15 +729,18 @@ int main()
      0--> The cell is blocked    */
 
 
-
-
+    cout << "Enter the max: ";
+    int n;
+    cin >> n;
     
-    for(int k=2;k<=100;k=k+2){
+    
+    for(int k=2;k<=n;k=k+2){
         float efficientAvg = 0;
         float optimalAvg = 0;
         float avg = 0;
         
         float efficientTime = 0;
+        float optimalTime = 0;
         float avgTime = 0;
 
         
@@ -769,19 +772,24 @@ int main()
         // }
         // cout << endl;
 
-        // int max = 999999;
-        // vector<string> optimalAns;
-        // for (int a = 0; a < bots.size(); a++){
-        //     for (int b = 0; b < bots.size(); b++){
-        //     int optimal = algoUtil(k,generatedGrid, bots[a], bots[b], bots, temp);
-        //     if (optimal < max)
-        //      {
-        //         max = optimal;
-        //         optimalAns = directions;
+        auto oStart = std::chrono::high_resolution_clock::now();
+        int max = 999999;
+        vector<string> optimalAns;
+        for (int a = 0; a < bots.size(); a++){
+            for (int b = 0; b < bots.size(); b++){
+            int optimal = algoUtil(k,generatedGrid, bots[a], bots[b], bots, temp);
+            if (optimal < max)
+             {
+                max = optimal;
+                optimalAns = directions;
                 
-        //      }
-        //     }
-        // }
+             }
+            }
+        }
+        auto oEnd = std::chrono::high_resolution_clock::now();
+        auto oDuration = std::chrono::duration_cast<std::chrono::microseconds>(oEnd - oStart);
+        optimalTime+=oDuration.count()/1000000.0;
+        optimalAvg+=optimalAns.size();
         
         // for(string s:optimalAns){
         //     cout << s << " ";
@@ -802,7 +810,7 @@ int main()
     efficientTime+=eDuration.count()/1000000.0;
     efficientAvg+=efficientAns.size();
 }
-    cout << k << " "<<avg/5 << " " <<efficientAvg/5<< " " << avgTime/5 << " " << efficientTime/5 <<endl;
+    cout << k << " "<<avg/5 << " " <<efficientAvg/5<< " " << optimalAvg/5 << " " << avgTime/5 << " " << efficientTime/5 << " "<<optimalTime/5 <<endl;
     // cout << k << " "<<avg/5 << " " << avgTime/5<<endl;
     }
     
