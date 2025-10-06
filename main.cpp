@@ -732,7 +732,7 @@ int main()
     cout << "Enter the max: ";
     int n;
     cin >> n;
-    
+    //added
     
     for(int k=2;k<=n;k=k+2){
         float efficientAvg = 0;
