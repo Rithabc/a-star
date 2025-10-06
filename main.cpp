@@ -14,6 +14,7 @@
 #define INT_MAX = 2 ^ 9;
 #define FLT_MAX 3.402823422e+38F
 #include <cstring>
+#include <chrono>
 
 // Hash function for pair<int, int>
 namespace std {
@@ -731,11 +732,14 @@ int main()
 
 
     
-    for(int k=2;k<11;k=k+2){
+    for(int k=2;k<=100;k=k+2){
         float efficientAvg = 0;
         float optimalAvg = 0;
         float avg = 0;
-    
+        
+        float efficientTime = 0;
+        float avgTime = 0;
+
         
         for(int w=0;w<5;w++){
         vector<vector<int>> generatedGrid = generateGrid(k);
@@ -750,28 +754,34 @@ int main()
             }
         }
         }
-
+        auto start = std::chrono::high_resolution_clock::now();
         vector<Pair> temp = bots;
         avg+= algoUtil(k,generatedGrid,bots[0],bots[generateRandom(0,bots.size()-1)],bots,temp);
+        temp = bots;
 
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        // cout << duration.count()/1000000.0 << " ";
+        // cout << endl;
+        avgTime+=duration.count()/1000000.0;
         // for(string s:directions){
         //     cout << s<< " ";
         // }
         // cout << endl;
 
-        int max = 999999;
-        vector<string> optimalAns;
-        for (int a = 0; a < bots.size(); a++){
-            for (int b = 0; b < bots.size(); b++){
-            int optimal = algoUtil(k,generatedGrid, bots[a], bots[b], bots, temp);
-            if (optimal < max)
-             {
-                max = optimal;
-                optimalAns = directions;
+        // int max = 999999;
+        // vector<string> optimalAns;
+        // for (int a = 0; a < bots.size(); a++){
+        //     for (int b = 0; b < bots.size(); b++){
+        //     int optimal = algoUtil(k,generatedGrid, bots[a], bots[b], bots, temp);
+        //     if (optimal < max)
+        //      {
+        //         max = optimal;
+        //         optimalAns = directions;
                 
-             }
-            }
-        }
+        //      }
+        //     }
+        // }
         
         // for(string s:optimalAns){
         //     cout << s << " ";
@@ -785,15 +795,15 @@ int main()
     
     vector<string> efficientAns;
     vector<vector<int>> efficientVis(k,vector<int>(k,0));
-    
+    auto eStart = std::chrono::high_resolution_clock::now();
     efficient(k,bots,efficientAns,efficientVis,generatedGrid,efficientMap);
-    // for(string s:efficientAns){
-    //     cout << s << " ";
-    // }
-        optimalAvg += optimalAns.size();
+    auto eEnd = std::chrono::high_resolution_clock::now();
+    auto eDuration = std::chrono::duration_cast<std::chrono::microseconds>(eEnd - eStart);
+    efficientTime+=eDuration.count()/1000000.0;
     efficientAvg+=efficientAns.size();
 }
-    cout << k << " "<<avg/5 << " " <<efficientAvg/5<< " " << optimalAvg/5<<endl;
+    cout << k << " "<<avg/5 << " " <<efficientAvg/5<< " " << avgTime/5 << " " << efficientTime/5 <<endl;
+    // cout << k << " "<<avg/5 << " " << avgTime/5<<endl;
     }
     
        
