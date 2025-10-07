@@ -11,7 +11,7 @@
 #include <stack>
 #include <set>
 #define INT_MAX = 10 ^ 9;
-#define FLT_MAX 3.402823466e+38F
+#define FLT_MAX 3.402823433e+38F
 #include <cstring>
 
 using namespace std;
@@ -139,11 +139,11 @@ int manhattan(int r1, int c1, int r2, int c2)
 
 // A C++ Program to implement A* Search Algorithm
 
-#define ROW 6
-#define COL 6
+#define ROW 3
+#define COL 3
 
-// int ROW = 6;
-// int COL = 6;
+// int ROW = 3;
+// int COL = 3;
 
 // Creating a shortcut for int, int pair type
 typedef pair<int, int> Pair;
@@ -659,26 +659,21 @@ int main()
      1--> The cell is not blocked
      0--> The cell is blocked    */
 
-    int grid[ROW][COL] = {{1, 1, 1, 1, 0, 1},
-                          {1, 0, 0, 1, 0, 0},
-                          {0, 0, 1, 1, 0, 1},
-                          {0, 1, 0, 0, 0, 1},
-                          {0, 0, 0, 1, 0, 1},
-                          {0, 0, 0, 0, 0, 0}};
+    int grid[ROW][COL] ;
 
-    // vector<vector<int>> generate_grid = generateGrid(6);
-    // for(int i = 0; i<6; i++ ){
-    //     for(int j= 0;j<6;j++){
-    //         grid[i][j] = generate_grid[i][j];
-    //     }
-    // }
+    vector<vector<int>> generate_grid = generateGrid(3);
+    for(int i = 0; i<3; i++ ){
+        for(int j= 0;j<3;j++){
+            grid[i][j] = generate_grid[i][j];
+        }
+    }
 
     vector<pair<int, int>> bots;
     bool flag = false;
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for (int j = 0; j < 6; j++)
+        for (int j = 0; j < 3; j++)
         {
             if (grid[i][j] == 0)
             {

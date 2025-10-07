@@ -17,10 +17,13 @@
 #include <chrono>
 
 // Hash function for pair<int, int>
-namespace std {
+namespace std
+{
     template <>
-    struct hash<std::pair<int, int>> {
-        std::size_t operator()(const std::pair<int, int>& p) const noexcept {
+    struct hash<std::pair<int, int>>
+    {
+        std::size_t operator()(const std::pair<int, int> &p) const noexcept
+        {
             return std::hash<int>()(p.first) ^ (std::hash<int>()(p.second) << 1);
         }
     };
@@ -127,8 +130,7 @@ vector<vector<int>> generateGrid(int n)
 {
     vector<vector<int>> grid(n, vector<int>(n, 1));
     int ind = generateRandom(0, n - 1);
-    
-    
+
     dfs(ind, ind, n, grid);
 
     // for (int row = 0; row < n; row++)
@@ -175,7 +177,7 @@ struct cell
 
 // A Utility Function to check whether given cell (row, col)
 // is a valid cell or not.
-bool isValid(int row, int col,int size)
+bool isValid(int row, int col, int size)
 {
     // Returns true if row number and column number
     // is in range
@@ -280,17 +282,17 @@ void tracePath(vector<vector<cell>> cellDetails, Pair dest)
 // A Function to find the shortest path between
 // a given source cell to a destination cell according
 // to A* Search Algorithm
-void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest,int size)
+void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest, int size)
 {
     // If the source is out of range
-    if (isValid(src.first, src.second,size) == false)
+    if (isValid(src.first, src.second, size) == false)
     {
         printf("Source is invalid\n");
         return;
     }
 
     // If the destination is out of range
-    if (isValid(dest.first, dest.second,size) == false)
+    if (isValid(dest.first, dest.second, size) == false)
     {
         printf("Destination is invalid\n");
         return;
@@ -318,8 +320,8 @@ void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest,int siz
 
     // Declare a 2D array of structure to hold the details
     // of that cell
-   
-    vector<vector<cell>> cellDetails(size,vector<cell>(size));
+
+    vector<vector<cell>> cellDetails(size, vector<cell>(size));
 
     int i, j;
 
@@ -400,7 +402,7 @@ void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest,int siz
         //----------- 1st Successor (North) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i - 1, j,size) == true)
+        if (isValid(i - 1, j, size) == true)
         {
             // If the destination cell is the same as the
             // current successor
@@ -449,7 +451,7 @@ void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest,int siz
         //----------- 2nd Successor (South) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i + 1, j,size) == true)
+        if (isValid(i + 1, j, size) == true)
         {
             // If the destination cell is the same as the
             // current successor
@@ -497,7 +499,7 @@ void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest,int siz
         //----------- 3rd Successor (East) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i, j + 1,size) == true)
+        if (isValid(i, j + 1, size) == true)
         {
             // If the destination cell is the same as the
             // current successor
@@ -547,7 +549,7 @@ void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest,int siz
         //----------- 4th Successor (West) ------------
 
         // Only process this cell if this is a valid one
-        if (isValid(i, j - 1,size) == true)
+        if (isValid(i, j - 1, size) == true)
         {
             // If the destination cell is the same as the
             // current successor
@@ -608,15 +610,21 @@ void aStarSearch(vector<vector<int>> &generatedGrid, Pair src, Pair dest,int siz
 
 int minVal = 9999999;
 
-
-int algoUtil(int size,vector<vector<int>> &generatedGrid, Pair src, Pair dest, vector<pair<int, int>> bots, vector<Pair> temp)
+int algoUtil(int size, vector<vector<int>> &generatedGrid, Pair src, Pair dest, vector<pair<int, int>> bots, stack<Pair> temp)
 {
     directions.clear();
     while (!temp.empty())
     {
         // cout<<temp[0].first<<" "<<temp[0].second<<endl;
-        int random = generateRandom(0, temp.size() - 1);
-        aStarSearch(generatedGrid, temp[random], dest,size);
+        // int random = generateRandom(0, temp.size() - 1);
+        aStarSearch(generatedGrid, temp.top(), dest, size);
+        if (directions.size() > minVal)
+        {
+            directions.clear();
+            edit.clear();
+            return 9999999;
+        }
+
         for (int i = 0; i < bots.size(); i++)
         {
             for (int j = 0; j < edit.size(); j++)
@@ -640,7 +648,7 @@ int algoUtil(int size,vector<vector<int>> &generatedGrid, Pair src, Pair dest, v
             }
         }
         // cout<<endl;
-        temp.clear();
+        temp = stack<Pair>();
         for (int i = 0; i < bots.size(); i++)
         {
             if (bots[i].first == dest.first && bots[i].second == dest.second)
@@ -649,7 +657,7 @@ int algoUtil(int size,vector<vector<int>> &generatedGrid, Pair src, Pair dest, v
             else
             {
                 // cout<<"("<<bots[i].first<<","<<bots[i].second<<") ";
-                temp.push_back(bots[i]);
+                temp.push(bots[i]);
             }
         }
         edit.clear();
@@ -665,6 +673,8 @@ int algoUtil(int size,vector<vector<int>> &generatedGrid, Pair src, Pair dest, v
     // cout<<directions.size()<<endl;
     // cout << src.first << "," << src.second << " to " << dest.first << "," << dest.second << " : ";
     // cout << directions.size() << endl;
+    if (directions.size() < minVal)
+        minVal = directions.size();
     return directions.size();
 }
 
@@ -674,16 +684,18 @@ struct hash_pair
     Pair p;
     vector<string> v;
     int len;
-    hash_pair(Pair p, vector<string> v, int len) : p(p), v(v), len(len){};
+    hash_pair(Pair p, vector<string> v, int len) : p(p), v(v), len(len) {};
 };
 
-void efficient(int size,vector<Pair> bots,vector<string> &efficientAns,vector<vector<int>> &efficientVis,vector<vector<int>> &generatedGrid,unordered_map<pair<int,int>,int> &efficientMap){
+void efficient(int size, vector<Pair> bots, vector<string> &efficientAns, vector<vector<int>> &efficientVis, vector<vector<int>> &generatedGrid, unordered_map<pair<int, int>, int> &efficientMap)
+{
     // cout <<2;
     stack<Pair> st;
     st.push(bots[0]);
     int prevI = bots[0].first;
     int prevJ = bots[0].second;
-    while(!efficientMap.size() == 0){
+    while (!efficientMap.size() == 0)
+    {
         Pair t = st.top();
         // cout << t.first<< "," <<t.second<<"->";
         efficientMap.erase(t);
@@ -691,33 +703,40 @@ void efficient(int size,vector<Pair> bots,vector<string> &efficientAns,vector<ve
         int j = t.second;
         efficientVis[i][j] = 1;
 
-        if(prevI == i-1) efficientAns.push_back("DOWN");
-        if(prevI == i+1) efficientAns.push_back("UP");
-        if(prevJ == j-1) efficientAns.push_back("RIGHT");
-        if(prevJ == j+1) efficientAns.push_back("LEFT");
+        if (prevI == i - 1)
+            efficientAns.push_back("DOWN");
+        if (prevI == i + 1)
+            efficientAns.push_back("UP");
+        if (prevJ == j - 1)
+            efficientAns.push_back("RIGHT");
+        if (prevJ == j + 1)
+            efficientAns.push_back("LEFT");
 
         prevI = i;
-        prevJ =j;
+        prevJ = j;
 
-        if(i-1>=0 && efficientVis[i-1][j] == 0 && generatedGrid[i-1][j]==0){
-            st.push(make_pair(i-1,j));
+        if (i - 1 >= 0 && efficientVis[i - 1][j] == 0 && generatedGrid[i - 1][j] == 0)
+        {
+            st.push(make_pair(i - 1, j));
         }
-        else if(i+1<size && efficientVis[i+1][j] == 0  && generatedGrid[i+1][j]==0){
-            st.push(make_pair(i+1,j));
+        else if (i + 1 < size && efficientVis[i + 1][j] == 0 && generatedGrid[i + 1][j] == 0)
+        {
+            st.push(make_pair(i + 1, j));
         }
-        else if(j-1>=0 && efficientVis[i][j-1] == 0  && generatedGrid[i][j-1]==0){
-            st.push(make_pair(i,j-1));
+        else if (j - 1 >= 0 && efficientVis[i][j - 1] == 0 && generatedGrid[i][j - 1] == 0)
+        {
+            st.push(make_pair(i, j - 1));
         }
-        else if(j+1<size && efficientVis[i][j+1] == 0 && generatedGrid[i][j+1]==0){
-            st.push(make_pair(i,j+1));
-        }else{
+        else if (j + 1 < size && efficientVis[i][j + 1] == 0 && generatedGrid[i][j + 1] == 0)
+        {
+            st.push(make_pair(i, j + 1));
+        }
+        else
+        {
             // cout << i << ","<<j;
             // cout << "pop";
             st.pop();
         }
-
-        
-
     }
 }
 
@@ -728,95 +747,118 @@ int main()
      1--> The cell is not blocked
      0--> The cell is blocked    */
 
-
     cout << "Enter the max: ";
     int n;
     cin >> n;
-    //added
-    
-    for(int k=2;k<=n;k=k+2){
+    // added
+
+    for (int k = 5; k <= n; k = k + 5)
+    {
         float efficientAvg = 0;
         float optimalAvg = 0;
         float avg = 0;
-        
+
         float efficientTime = 0;
         float optimalTime = 0;
         float avgTime = 0;
 
-        
-        for(int w=0;w<5;w++){
-        vector<vector<int>> generatedGrid = generateGrid(k);
-        vector<Pair> bots;
-        unordered_map<pair<int,int>,int> efficientMap;
-    
-        for(int i=0;i<k;i++){
-        for(int j=0;j<k;j++){
-            if(generatedGrid[i][j]==0){
-            bots.push_back(make_pair(i,j));
-            efficientMap[make_pair(i,j)]++;
+        for (int w = 0; w < 3; w++)
+        {
+            vector<vector<int>> generatedGrid = generateGrid(k);
+            vector<Pair> bots;
+            unordered_map<pair<int, int>, int> efficientMap;
+            stack<Pair> temp;
+            for (int i = 0; i < k; i++)
+            {
+                for (int j = 0; j < k; j++)
+                {
+                    if (generatedGrid[i][j] == 0)
+                    {
+                        bots.push_back(make_pair(i, j));
+                        efficientMap[make_pair(i, j)]++;
+                        temp.push(make_pair(i, j));
+                    }
+                }
             }
-        }
-        }
-        auto start = std::chrono::high_resolution_clock::now();
-        vector<Pair> temp = bots;
-        avg+= algoUtil(k,generatedGrid,bots[0],bots[generateRandom(0,bots.size()-1)],bots,temp);
-        temp = bots;
+            auto start = std::chrono::high_resolution_clock::now();
 
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-        // cout << duration.count()/1000000.0 << " ";
-        // cout << endl;
-        avgTime+=duration.count()/1000000.0;
-        // for(string s:directions){
-        //     cout << s<< " ";
-        // }
-        // cout << endl;
+            avg += algoUtil(k, generatedGrid, bots[0], bots[generateRandom(0, bots.size() - 1)], bots, temp);
+            minVal = 9999999;
 
-        auto oStart = std::chrono::high_resolution_clock::now();
-        int max = 999999;
-        vector<string> optimalAns;
-        for (int a = 0; a < bots.size(); a++){
-            for (int b = 0; b < bots.size(); b++){
-            int optimal = algoUtil(k,generatedGrid, bots[a], bots[b], bots, temp);
-            if (optimal < max)
-             {
-                max = optimal;
-                optimalAns = directions;
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            // cout << duration.count()/1000000.0 << " ";
+            // cout << endl;
+            avgTime += duration.count() / 1000000.0;
+            // for(string s:directions){
+            //     cout << s<< " ";
+            // }
+            // cout << endl;
+
+            auto oStart = std::chrono::high_resolution_clock::now();
+            int max = 999999;
+            vector<string> optimalAns;
+            Pair dest = make_pair(-1, -1);
+            for (int a = 0; a < bots.size(); a++)
+            {
                 
-             }
+                
+                    if (dest.first == -1)
+                    {
+                        int optimal = algoUtil(k, generatedGrid, bots[0], bots[a], bots, temp);
+                        if (optimal < max)
+                        {
+                            minVal = optimal;
+                            max = optimal;
+                            optimalAns = directions;
+                            dest = bots[a];
+                        }
+                    }
+                    else
+                    {
+                        if(manhattan(bots[a].first,bots[a].second,dest.first,dest.second)>0){
+                        int optimal = algoUtil(k, generatedGrid, bots[0], bots[a], bots, temp);
+                        if (optimal < max)
+                        {
+                            minVal = optimal;
+                            max = optimal;
+                            optimalAns = directions;
+                            dest = bots[a];
+                        }
+                        
+                    }
+                
             }
         }
-        auto oEnd = std::chrono::high_resolution_clock::now();
-        auto oDuration = std::chrono::duration_cast<std::chrono::microseconds>(oEnd - oStart);
-        optimalTime+=oDuration.count()/1000000.0;
-        optimalAvg+=optimalAns.size();
-        
-        // for(string s:optimalAns){
-        //     cout << s << " ";
-        // }
-        // cout << endl;
-        
-        // for(string s:directions){
-        //     cout << s<< " ";
-        // }
-    
-    
-    vector<string> efficientAns;
-    vector<vector<int>> efficientVis(k,vector<int>(k,0));
-    auto eStart = std::chrono::high_resolution_clock::now();
-    efficient(k,bots,efficientAns,efficientVis,generatedGrid,efficientMap);
-    auto eEnd = std::chrono::high_resolution_clock::now();
-    auto eDuration = std::chrono::duration_cast<std::chrono::microseconds>(eEnd - eStart);
-    efficientTime+=eDuration.count()/1000000.0;
-    efficientAvg+=efficientAns.size();
-}
-    cout << k << " "<<avg/5 << " " <<efficientAvg/5<< " " << optimalAvg/5 << " " << avgTime/5 << " " << efficientTime/5 << " "<<optimalTime/5 <<endl;
-    // cout << k << " "<<avg/5 << " " << avgTime/5<<endl;
-    }
-    
-       
+            
+            
+            minVal = 9999999;
+            auto oEnd = std::chrono::high_resolution_clock::now();
+            auto oDuration = std::chrono::duration_cast<std::chrono::microseconds>(oEnd - oStart);
+            optimalTime += oDuration.count() / 1000000.0;
+            optimalAvg += optimalAns.size();
 
-    
-    
+            // for(string s:optimalAns){
+            //     cout << s << " ";
+            // }
+            // cout << endl;
+
+            // for(string s:directions){
+            //     cout << s<< " ";
+            // }
+
+            vector<string> efficientAns;
+            vector<vector<int>> efficientVis(k, vector<int>(k, 0));
+            auto eStart = std::chrono::high_resolution_clock::now();
+            efficient(k, bots, efficientAns, efficientVis, generatedGrid, efficientMap);
+            auto eEnd = std::chrono::high_resolution_clock::now();
+            auto eDuration = std::chrono::duration_cast<std::chrono::microseconds>(eEnd - eStart);
+            efficientTime += eDuration.count() / 1000000.0;
+            efficientAvg += efficientAns.size();
+        }
+        // cout << k << " "<<avg/5 << " " << avgTime/5<<endl;
+        cout << k << " " << avg / 3 << " " << efficientAvg / 3 << " " << optimalAvg / 3 << " " << avgTime / 3 << " " << efficientTime / 3 << " " << optimalTime / 3 << "\n";
+    }
     return (0);
 }
+

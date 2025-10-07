@@ -138,7 +138,7 @@ vector<vector<int>> generateGrid(int n)
         }
         cout << endl;
     }
-
+    cout << "Map generated" <<endl;
     return grid;
 }
 // A*star professor's stratergy
@@ -150,8 +150,8 @@ int manhattan(int r1, int c1, int r2, int c2)
 
 // A C++ Program to implement A* Search Algorithm
 
-#define ROW 400
-#define COL 400
+#define ROW 50
+#define COL 50
 
 // int ROW = 2;
 // int COL = 2;
@@ -784,6 +784,8 @@ int main()
     queue<Pair> p;
     p.push(bots[0]);
     Pair dest;
+
+    
     // // bots.clear();
     // while(!p.empty()){
     //     Pair t = p.front();

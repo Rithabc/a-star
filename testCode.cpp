@@ -139,8 +139,8 @@ int manhattan(int r1, int c1, int r2, int c2)
 
 // A C++ Program to implement A* Search Algorithm
 
-#define ROW 100
-#define COL 100
+#define ROW 25
+#define COL 25
 
 // int ROW = 2;
 // int COL = 2;
@@ -628,6 +628,11 @@ int algoUtil(int grid[][COL], Pair src, Pair dest, vector<pair<int, int>> bots, 
                         bots[i].first -= edit[j].first;
                         bots[i].second -= edit[j].second;
                     }
+                    if (bots[i].first == dest.first && bots[i].second == dest.second)
+            {
+            }else{
+                temp.push(bots[i]);
+            }
                 }
             }
         }
@@ -679,7 +684,12 @@ int main()
      1--> The cell is not blocked
      0--> The cell is blocked    */
 
-    int grid[ROW][COL];
+
+//      0 1 1 0 
+// 0 0 0 0 
+// 1 1 1 0 
+// 0 0 0 0 
+    int grid[ROW][COL] ;
     // {{0,0},
     //                         {0,1}};
 
@@ -721,10 +731,42 @@ int main()
     {
         temp.push(bots[i]);
     }
-    int ans = algoUtil(grid, dest, dest, bots, temp);
-    cout << "Minimum number of steps: " << ans << endl;
+    vector<string> answers;
+    int maxans = 9999999;
+Pair closestDest = make_pair(-1,-1);
+    for(int i =0;i<bots.size(); i++){
+       for(int j =0;j<bots.size();j++){
+            // if(closestDest.first == -1){
+            //     int ans = algoUtil(grid, bots[0], bots[i], bots, temp);
+            //   if(ans<maxans){
+            //     maxans = ans;
+            //     closestDest = bots[i];
+            //     answers = directions;
+            //   }
+            // }else{
+            //     if(manhattan(bots[i].first,bots[i].second,closestDest.first,closestDest.second)>0){
+            //         int ans = algoUtil(grid, bots[0], bots[i], bots, temp);
+            //   if(ans<maxans){
+            //     maxans = ans;
+            //     closestDest = bots[i];
+            //     answers = directions;
+            //   }
+            //     }
+            // }
+            int ans = algoUtil(grid, bots[i], bots[j], bots, temp);
+              if(ans<maxans){
+                maxans = ans;
+                closestDest = bots[i];
+                answers = directions;
+              }
+           
+       }
+    }
+    
+    cout << "Minimum number of steps: " << maxans << endl;
+    cout << "Destination: (" << closestDest.first << "," << closestDest.second << ")" << endl;
 
-    for(string s : directions){
+    for(string s : answers){
         cout<<s<<" ";
     }
 
